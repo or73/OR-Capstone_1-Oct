@@ -10,6 +10,22 @@ Meteor.startup(function()
                       function(file) 
                       {
                         Session.set(file.uniqueIdentifier, 0);
+
+                        console.log("Meteor.startup (files_Client.js) - File: ", file);
+                        console.log("Meteor.startup (files_Client.js): -this: ", this);
+
+                        var fileName = file.file.name;
+                        var fileId = file.file.uniqueIdentifier;
+
+                        console.log("Meteor.startup (files_Client.js): - fileName: ", fileName);
+                        console.log("Meteor.startup (files_Client.js): - fileId: ", fileId);
+                        /*title: fileData.title,
+                            fileId: filedata.fileId,
+                            createdAt: new Date(),
+                            owner: Meteor.userId()*/
+
+                        Meteor.call('addDoc', fileName, fileId);
+
                         return myData.insert({
                                               _id: file.uniqueIdentifier,
                                               filename: file.fileName,
@@ -109,16 +125,40 @@ Template.filesList
 Template.filesList
   .events({
             'click .del-file': function(e, t) 
-            {
-              if (Session.get("" + this._id)) 
-              {
-                console.warn("Cancelling active upload to remove file! " + this._id);
-                myData.resumable.removeFile(myData.resumable.getFromUniqueIdentifier("" + this._id));
-              }
-              return myData.remove({
-                                    _id: this._id
-                                  });
-            }
+                              {
+                                if (Session.get("" + this._id)) 
+                                {
+                                  console.warn("Cancelling active upload to remove file! " + this._id);
+                                  myData.resumable.removeFile(myData.resumable.getFromUniqueIdentifier("" + this._id));
+                                }
+                                return myData.remove({
+                                                      _id: this._id
+                                                    });
+                              },
+
+            'click .toggle-private': function()
+                                    {
+                                      console.log("toggle-private (files_client.js): ", this);  
+                                      
+                                      if (Session.get("" + this._id)) 
+                                      {
+                                        console.warn("Cancelling active upload to remove file! " + this._id);
+                                        myData.resumable.removeFile(myData.resumable.getFromUniqueIdentifier("" + this._id));
+                                      }
+                                      console.log("toggle-private: *** MODIFY DATA ***");
+                                      /*myData.write({
+                                                      _id: this._id
+                                                    });*/
+
+                                      Meteor.call('setPrivate', this._id);
+                                    },
+
+            'click .toggle-checked': function()
+                                    {
+                                      console.log("toggle-checked (files_client.js): ", this);
+
+                                      Meteor.call('updateDoc', this._id)
+                                    }
           });
 
 Template.filesList
@@ -160,6 +200,20 @@ Template.filesList
                             return Meteor.user().username;
                           return false;                          
                         },
+
+              private: function()
+                      {
+                        var publicPrivate = !this.metadata.public;
+                        this.metadata.private = publicPrivate;
+                        return publicPrivate;
+                      },
+
+              checked: function()
+                      {
+                        var checked = !this.metadata.checked;
+                        this.metadata.checked = checked;
+                        return checked;
+                      },
 
               id: function() 
                   {

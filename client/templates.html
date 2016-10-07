@@ -18,10 +18,15 @@
         navbar - TEMPLATE 
      * * * * * * * * * * * * * -->
 <template name="navbar">
-    <div class="navbar navbar-default" role='navigation'>
+    <div    class="navbar navbar-default" 
+            role='navigation'>
         <div class="navbar-header">
-            <a class="navbar-brand" href="/login">OR -Docs & Files</a>
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <a  class="navbar-brand" 
+                href="/login">OR -Docs & Files</a>
+            <button type="button" 
+                    class="navbar-toggle collapsed" 
+                    data-toggle="collapse"
+                    data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -80,12 +85,28 @@
                             <!--<button type="button" class="ui mini negative icon right floated button close del-file" aria-hidden="true">
                                 <i class="remove icon"></i>
                             </button>-->
-                            <button type="button" class="btn btn-danger btn-xs close del-file">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </button><br/>
-                            <button type="button" class="btn btn-warning btn-xs">
-                                Public       
-                            </button>
+                            
+                            {{#if owner}}
+                                <button type="button" 
+                                        class="btn btn-danger btn-xs close del-file">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button><br/>
+
+                                <input  type="checkbox" 
+                                        checked="{{checked}}"
+                                        class="toggle-checked"/>
+                                {{#if private}}
+                                    <button type="button" 
+                                            class="btn toggle-private btn-success btn-xs">
+                                        Private       
+                                    </button>
+                                {{else}}
+                                    <button type="button" 
+                                            class="btn toggle-private btn-warning btn-xs">
+                                        Public
+                                    </button>
+                                {{/if}}
+                            {{/if}}
                             <!-- -->
                         </td>
 
@@ -115,7 +136,9 @@
                                 {{uploadProgress}}% complete
                                 <br/>
                                 <div data-percent="{{uploadProgress}}" class="ui bottom attached indicating progress">
-                                    <div class="bar" style="transition-duration: 100ms; width: {{uploadProgress}}%;"></div>
+                                    <div    class="bar" 
+                                            style="transition-duration: 100ms; width: {{uploadProgress}}%;">
+                                    </div> <!-- / .bar -->
                                 </div> <!-- / .ui -->
                             {{/if}}
 
@@ -216,7 +239,7 @@
     <div class="row">
         <div class="col-md-12">
             <h1 class="text-center">Welcome to</h1> 
-            <h1 class="text-center"><strong>Docs & Files Application</strong></h1>            
+            <h1 class="text-center"><strong>Smart File Sharing - SFS</strong></h1>            
         </div> <!-- / .col -->
     </div> <!-- / .row -->
     <div class="row">

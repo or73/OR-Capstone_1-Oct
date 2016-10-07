@@ -29,3 +29,6 @@ vsivsi:file-collection
 twbs:bootstrap
 iron:router
 ian:accounts-ui-bootstrap-3
+accounts-ui
+ostrio:files
+session
